@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "jasmid.ts": "^2.1.0",
     "lodash": "^4.17.10",
     "mdi": "^2.2.43",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react-dom": "^16.4.1",
+    "text-encoding": "^0.6.4"
   },
   "scripts": {
     "start": "react-scripts-ts start",
