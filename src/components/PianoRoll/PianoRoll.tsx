@@ -4,8 +4,8 @@ import { Keys } from "./Keys"
 import { Grid } from "./Grid"
 
 const numberOfKeys = 127
-const keyHeight = 20
-const keyWidth = 60
+const keyHeight = 16
+const keyWidth = 50
 const stageWidth = 500
 
 export const PianoRoll = () => {
@@ -13,7 +13,7 @@ export const PianoRoll = () => {
     <Stage
       width={stageWidth}
       height={500}
-      options={{ antialias: true, backgroundColor: 0xeeeeee }}
+      options={{ antialias: true, backgroundColor: 0xffffff }}
     >
       <Grid
         numberOfKeys={numberOfKeys}

@@ -1,6 +1,11 @@
 import React, { SFC } from "react"
 import _ from "lodash"
-import { Rectangle, Line, Bounds, RoundedRectangle } from "./PixiComponents"
+import {
+  Rectangle,
+  Bounds,
+  RoundedRectangle,
+  RoundedRectangleProps
+} from "./PixiComponents"
 
 // 0: white, 1: black
 const colors = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
@@ -41,36 +46,74 @@ const keyLayoutForNoteNumber = (
   }
 }
 
-const WhiteKey: SFC<Bounds> = ({ x, y, width, height }) => {
-  const right = x + width
-  const bottom = y + height
+/* 右側だけが角丸の矩形 */
+const RightRoundedRectangle: SFC<RoundedRectangleProps> = ({
+  x,
+  y,
+  width,
+  height,
+  radius,
+  fill
+}) => {
   return (
     <>
-      {/*左側は角丸にしない*/}
-      <Rectangle
-        x={x}
-        y={y}
-        width={width / 2}
-        height={height}
-        fill={0xffffff}
-      />
+      <Rectangle x={x} y={y} width={width / 2} height={height} fill={fill} />
       <RoundedRectangle
         x={x}
         y={y}
         width={width}
         height={height}
-        fill={0xffffff}
-        radius={height / 8}
+        fill={fill}
+        radius={radius}
       />
-      <Line x1={x} y1={y} x2={right} y2={y} color={0x000000} />
-      <Line x1={x} y1={bottom} x2={right} y2={bottom} color={0x000000} />
+    </>
+  )
+}
+
+const WhiteKey: SFC<Bounds> = ({ x, y, width, height }) => {
+  const margin = 1
+  const shadowWidth = 3
+  return (
+    <>
+      <RoundedRectangle
+        x={x}
+        y={y + margin}
+        width={width - margin}
+        height={height - margin}
+        fill={0xe4e8f3}
+        radius={height / 10}
+      />
+      <RightRoundedRectangle
+        x={x}
+        y={y + margin}
+        width={width - margin - shadowWidth}
+        height={height - margin}
+        fill={0xffffff}
+        radius={height / 10}
+      />
     </>
   )
 }
 
 const BlackKey: SFC<Bounds> = bounds => {
+  const highlightWidth = bounds.width / 10
+  const highlightMargin = 1
   return (
-    <RoundedRectangle {...bounds} fill={0x000000} radius={bounds.height / 8} />
+    <>
+      <RoundedRectangle
+        {...bounds}
+        fill={0x21366a}
+        radius={bounds.height / 8}
+      />
+      <RoundedRectangle
+        x={bounds.x + bounds.width - highlightWidth - highlightMargin}
+        y={bounds.y + highlightMargin}
+        width={highlightWidth}
+        height={bounds.height - highlightMargin * 2}
+        fill={0x455d96}
+        radius={bounds.height / 8}
+      />
+    </>
   )
 }
 
@@ -92,7 +135,7 @@ export const Keys: SFC<KeysProps> = ({ keyHeight, width, numberOfKeys }) => {
         y={0}
         width={width}
         height={numberOfKeys * keyHeight}
-        fill={0x222222}
+        fill={0x515a7c}
       />
       {layouts.filter(l => !l.isBlack).map((l, i) => {
         return <WhiteKey key={i} {...l} />
