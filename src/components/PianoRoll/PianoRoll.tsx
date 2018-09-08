@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react"
 import * as PIXI from "pixi.js"
-import { Stage, withPixiApp, PixiComponent } from "@inlet/react-pixi"
+import { Stage, withPixiApp } from "@inlet/react-pixi"
+import { Keys } from "./Keys"
+import { Rectangle, Circle } from "./PixiComponents"
 
 interface MoverProps {
   app: PIXI.Application
@@ -41,51 +43,13 @@ const Mover = withPixiApp(
   }
 )
 
-interface RectangleProps {
-  fill: any
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-const Rectangle = PixiComponent<RectangleProps, PIXI.Graphics>("Rectangle", {
-  create: () => new PIXI.Graphics(),
-  applyProps: (g, _, props) => {
-    const { fill, x, y, width, height } = props
-
-    g.clear()
-    g.beginFill(fill)
-    g.drawRect(x, y, width, height)
-    g.endFill()
-  }
-})
-
-interface CircleProps {
-  fill: any
-  x: number
-  y: number
-  radius: number
-}
-
-const Circle = PixiComponent<CircleProps, PIXI.Graphics>("Circle", {
-  create: () => new PIXI.Graphics(),
-  applyProps: (g, _, props) => {
-    const { fill, x, y, radius } = props
-
-    g.clear()
-    g.beginFill(fill)
-    g.drawCircle(x, y, radius)
-    g.endFill()
-  }
-})
-
 const App = () => (
   <Stage
     width={500}
     height={500}
     options={{ antialias: true, backgroundColor: 0x012b30 }}
   >
+    <Keys numberOfKeys={127} keyHeight={20} width={60} />
     <Mover from={0} to={400} ease={Math.sin} speed={0.05}>
       {({ value, i }) => (
         <Rectangle
