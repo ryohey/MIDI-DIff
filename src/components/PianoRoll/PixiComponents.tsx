@@ -1,14 +1,8 @@
 import * as PIXI from "pixi.js"
 import { PixiComponent } from "@inlet/react-pixi"
+import { IRect } from "../../geometry"
 
-export interface Bounds {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
-export type RectangleProps = Bounds & {
+export type RectangleProps = IRect & {
   fill: number
   debugDraw?: boolean
 }
@@ -85,7 +79,7 @@ export const Circle = PixiComponent<CircleProps, PIXI.Graphics>("Circle", {
   }
 })
 
-export type RoundedRectangleProps = Bounds & {
+export type RoundedRectangleProps = IRect & {
   fill: number
   radius: number
 }

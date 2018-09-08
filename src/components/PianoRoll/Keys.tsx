@@ -2,10 +2,11 @@ import React, { SFC } from "react"
 import _ from "lodash"
 import {
   Rectangle,
-  Bounds,
   RoundedRectangle,
   RoundedRectangleProps
 } from "./PixiComponents"
+import { Container } from "@inlet/react-pixi"
+import { IRect } from "../../geometry"
 
 // 0: white, 1: black
 const colors = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
@@ -70,7 +71,7 @@ const RightRoundedRectangle: SFC<RoundedRectangleProps> = ({
   )
 }
 
-const WhiteKey: SFC<Bounds> = ({ x, y, width, height }) => {
+const WhiteKey: SFC<IRect> = ({ x, y, width, height }) => {
   const margin = 1
   const shadowWidth = 3
   return (
@@ -95,7 +96,7 @@ const WhiteKey: SFC<Bounds> = ({ x, y, width, height }) => {
   )
 }
 
-const BlackKey: SFC<Bounds> = bounds => {
+const BlackKey: SFC<IRect> = bounds => {
   const highlightWidth = bounds.width / 10
   const highlightMargin = 1
   return (
@@ -118,18 +119,26 @@ const BlackKey: SFC<Bounds> = bounds => {
 }
 
 export interface KeysProps {
+  x?: number
+  y?: number
   keyHeight: number
   width: number
   numberOfKeys: number
 }
 
-export const Keys: SFC<KeysProps> = ({ keyHeight, width, numberOfKeys }) => {
+export const Keys: SFC<KeysProps> = ({
+  x = 0,
+  y = 0,
+  keyHeight,
+  width,
+  numberOfKeys
+}) => {
   const layouts = _.range(0, numberOfKeys).map(i =>
     keyLayoutForNoteNumber(i, width, keyHeight)
   )
 
   return (
-    <>
+    <Container x={x} y={y}>
       <Rectangle
         x={0}
         y={0}
@@ -143,6 +152,6 @@ export const Keys: SFC<KeysProps> = ({ keyHeight, width, numberOfKeys }) => {
       {layouts.filter(l => l.isBlack).map((l, i) => {
         return <BlackKey key={i} {...l} />
       })}
-    </>
+    </Container>
   )
 }
