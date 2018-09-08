@@ -9,6 +9,9 @@
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "@types/react-modal": "^3.2.0",
+    "@inlet/react-pixi": "^0.1.4",
+    "@types/pixi.js": "^4.8.0",
+    "@types/text-encoding": "0.0.33",
     "prettier": "^1.13.7",
     "react-scripts-ts": "^2.16.0",
     "shx": "^0.3.2",
@@ -20,8 +23,10 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "jasmid.ts": "^2.1.0",
+    "jsondiffpatch": "^0.3.11",
     "lodash": "^4.17.10",
     "mdi": "^2.2.43",
+    "pixi.js": "^4.8.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "text-encoding": "^0.6.4"
