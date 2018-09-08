@@ -84,3 +84,23 @@ export const Circle = PixiComponent<CircleProps, PIXI.Graphics>("Circle", {
     g.endFill()
   }
 })
+
+export type RoundedRectangleProps = Bounds & {
+  fill: number
+  radius: number
+}
+
+export const RoundedRectangle = PixiComponent<
+  RoundedRectangleProps,
+  PIXI.Graphics
+>("RoundedRectangle", {
+  create: () => new PIXI.Graphics(),
+  applyProps: (g, _, props) => {
+    const { fill, x, y, width, height, radius } = props
+
+    g.clear()
+    g.beginFill(fill)
+    g.drawRoundedRect(x, y, width, height, radius)
+    g.endFill()
+  }
+})
