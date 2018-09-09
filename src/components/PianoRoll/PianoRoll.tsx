@@ -2,7 +2,7 @@ import React from "react"
 import { Stage } from "@inlet/react-pixi"
 import { Keys } from "./Keys"
 import { Grid } from "./Grid"
-import midi from "../../template_c_e.json"
+import midi from "../../testdata/midi1.json"
 import { toAbsolute } from "../../midi/toAbsolute"
 import { MidiEvent } from "jasmid.ts/lib"
 import { assemble } from "../../midi/noteAssembler"
@@ -23,7 +23,10 @@ const filterNotes = (e: AbsoluteMidiEvent | NoteEvent): e is NoteEvent =>
 
 export const PianoRoll = () => {
   const events = midi.tracks[1] as MidiEvent[]
-  const notes = assemble(toAbsolute(events)).filter(filterNotes)
+  const notes = assemble(toAbsolute(events))
+    .filter(filterNotes)
+    .map(n => ({ ...n, color: 0xff0000 }))
+
   return (
     <Stage
       width={stageWidth}
@@ -41,10 +44,11 @@ export const PianoRoll = () => {
         width={keyWidth}
       />
       <Notes
+        x={keyWidth}
         notes={notes}
         transform={{
           pixelsPerKey: keyHeight,
-          pixelsPerTick: 1,
+          pixelsPerTick: 0.1,
           maxNoteNumber: numberOfKeys
         }}
       />

@@ -27,9 +27,9 @@ describe("assemble", () => {
     const result = assemble(notes)
     assert.equal(result.length, 1)
     assert.deepEqual(result[0], {
-      type: "channel",
-      subtype: "note",
-      noteNumber: 14,
+      type: "midi",
+      subType: "note",
+      note: 14,
       tick: 93,
       velocity: 120,
       channel: 5,

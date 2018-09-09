@@ -1,19 +1,83 @@
 import assert from "assert"
-import fs from "fs"
-import { parseMidiFile } from "../test/node-jasmid"
-import * as jdiff from "jsondiffpatch"
+import { diffEvents } from "./diff"
+import {
+  NoteOnEvent,
+  NoteOffEvent,
+  AbsoluteMidiEvent
+} from "./AbsoluteMidiEvent"
 
-const readMidi = (filepath: string) => {
-  const midiData = new Uint8Array(fs.readFileSync(filepath)).buffer
-  return parseMidiFile(midiData)
-}
+const noteOn = (note: number, tick: number, velocity = 127): NoteOnEvent => ({
+  type: "midi",
+  subType: "noteOn",
+  typeByte: 0,
+  note,
+  tick,
+  velocity,
+  channel: 1
+})
+
+const noteOff = (note: number, tick: number, velocity = 0): NoteOffEvent => ({
+  type: "midi",
+  subType: "noteOff",
+  typeByte: 0,
+  note,
+  tick,
+  velocity,
+  channel: 1
+})
 
 describe("diff", () => {
-  it("should returns diff", () => {
-    const midi1 = readMidi("./fixtures/template_c_d.mid")
-    const midi2 = readMidi("./fixtures/template_c_e.mid")
-    const diff = jdiff.diff(midi1, midi2)
-    console.dir(JSON.stringify(diff, null, 2))
-    assert.fail()
+  it("should returns no changes", () => {
+    const events1 = [noteOn(64, 0), noteOff(64, 10)]
+    const events2 = [noteOn(64, 0), noteOff(64, 10)]
+    const diff = diffEvents(events1, events2)
+    assert.deepEqual(diff, [])
+  })
+  it("should returns added changes", () => {
+    const events1: AbsoluteMidiEvent[] = []
+    const events2 = [noteOn(64, 0), noteOff(64, 10)]
+    const diff = diffEvents(events1, events2)
+    assert.deepEqual(diff, [
+      {
+        type: "added",
+        value: noteOn(64, 0)
+      },
+      {
+        type: "added",
+        value: noteOff(64, 10)
+      }
+    ])
+  })
+  it("should returns modified changes", () => {
+    const events1 = [noteOn(64, 0), noteOff(64, 10)]
+    const events2 = [noteOn(65, 0), noteOff(65, 10)]
+    const diff = diffEvents(events1, events2)
+    assert.deepEqual(diff, [
+      {
+        type: "modified",
+        oldValue: noteOn(64, 0),
+        newValue: noteOn(65, 0)
+      },
+      {
+        type: "modified",
+        oldValue: noteOff(64, 10),
+        newValue: noteOff(65, 10)
+      }
+    ])
+  })
+  it("should returns deleted changes", () => {
+    const events1 = [noteOn(64, 0), noteOff(64, 10)]
+    const events2: AbsoluteMidiEvent[] = []
+    const diff = diffEvents(events1, events2)
+    assert.deepEqual(diff, [
+      {
+        type: "deleted",
+        value: noteOn(64, 0)
+      },
+      {
+        type: "deleted",
+        value: noteOff(64, 10)
+      }
+    ])
   })
 })
