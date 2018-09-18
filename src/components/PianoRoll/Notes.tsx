@@ -7,6 +7,7 @@ import {
   convertRect
 } from "../../transform/NoteCoordTransform"
 import { RoundedRectangle } from "./PixiComponents"
+import { roundRect } from "../../geometry"
 
 export type ColoredNote = NoteEvent & {
   color: number
@@ -21,12 +22,12 @@ export interface NotesProps {
 
 export const Notes: SFC<NotesProps> = ({ x = 0, y = 0, notes, transform }) => {
   const toRect = convertRect(transform)
-  const rects = notes.map(n => ({ ...toRect(n), color: n.color }))
+  const rects = notes.map(n => ({ ...roundRect(toRect(n)), color: n.color }))
 
   return (
     <Container x={x} y={y}>
       {rects.map(r => (
-        <RoundedRectangle {...r} fill={r.color} radius={4} />
+        <RoundedRectangle {...r} fill={r.color} radius={2} />
       ))}
     </Container>
   )

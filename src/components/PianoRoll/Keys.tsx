@@ -6,7 +6,7 @@ import {
   RoundedRectangleProps
 } from "./PixiComponents"
 import { Container } from "@inlet/react-pixi"
-import { IRect } from "../../geometry"
+import { IRect, roundRect } from "../../geometry"
 
 // 0: white, 1: black
 const colors = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]
@@ -24,10 +24,12 @@ const keyLayoutForNoteNumber = (
     const height = keyHeight * 0.8
     return {
       isBlack,
-      x: 0,
-      y: baseY + (keyHeight - height) / 2,
-      width: keyWidth * 0.6,
-      height
+      ...roundRect({
+        x: 0,
+        y: baseY + (keyHeight - height) / 2,
+        width: keyWidth * 0.6,
+        height
+      })
     }
   }
 
@@ -40,10 +42,12 @@ const keyLayoutForNoteNumber = (
 
   return {
     isBlack,
-    x: 0,
-    y,
-    width: keyWidth,
-    height
+    ...roundRect({
+      x: 0,
+      y,
+      width: keyWidth,
+      height
+    })
   }
 }
 

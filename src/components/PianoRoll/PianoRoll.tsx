@@ -28,6 +28,10 @@ const stageHeight = numberOfKeys * keyHeight
 const filterNotes = (e: AbsoluteMidiEvent | NoteEvent): e is NoteEvent =>
   e.subType === "note"
 
+const greenColor = 0x33ff5f
+const redColor = 0xff7585
+const blackColor = 0xe1e8ef
+
 export const PianoRoll = () => {
   const readNotes = (midi: any) =>
     assemble(toAbsolute(midi.tracks[1] as MidiEvent[])).filter(filterNotes)
@@ -36,13 +40,20 @@ export const PianoRoll = () => {
   const c = changes(events1, events2)
   const addedNotes = c
     .filter(isAddedChange)
-    .map(e => ({ ...e.value, color: 0x00ff00 }))
+    .map(e => ({ ...e.value, color: greenColor }))
   const modifiedNotes = c
     .filter(isModifiedChange)
-    .map(e => ({ ...e.newValue, color: 0xffff00 }))
+    .map(e => ({ ...e.newValue, color: greenColor }))
+  const modifiedOldNotes = c
+    .filter(isModifiedChange)
+    .map(e => ({ ...e.oldValue, color: redColor }))
   const deletedNotes = c
     .filter(isDeletedChange)
-    .map(e => ({ ...e.value, color: 0xff0000 }))
+    .map(e => ({ ...e.value, color: redColor }))
+  const changedIndexes = c.map(e => e.index)
+  const unchangedNotes = events1
+    .filter((_, k) => !changedIndexes.includes(k))
+    .map(e => ({ ...e, color: blackColor }))
 
   return (
     <Stage
@@ -62,7 +73,13 @@ export const PianoRoll = () => {
       />
       <Notes
         x={keyWidth}
-        notes={[...addedNotes, ...modifiedNotes, ...deletedNotes]}
+        notes={[
+          ...addedNotes,
+          ...modifiedNotes,
+          ...deletedNotes,
+          ...modifiedOldNotes,
+          ...unchangedNotes
+        ]}
         transform={{
           pixelsPerKey: keyHeight,
           pixelsPerTick: 0.1,

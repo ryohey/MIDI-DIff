@@ -16,7 +16,7 @@ export interface DeletedChange<T> {
 
 export interface MovedChange<T> {
   type: "moved"
-  fromIndex: any
+  index: any
   toIndex: any
   value: T
 }
@@ -68,7 +68,7 @@ export const changes = <T>(a: T[], b: T[]): Change<T>[] => {
             if (value[2] === 3) {
               return {
                 type: "moved",
-                fromIndex,
+                index: fromIndex,
                 toIndex: value[1],
                 value: value[0]
               } as MovedChange<T>

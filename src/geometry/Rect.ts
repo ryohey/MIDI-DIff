@@ -64,3 +64,16 @@ export function scale(rect: IRect, scaleX: number, scaleY: number): IRect {
     height: rect.height * scaleY
   }
 }
+
+const elementWiseOperation = (func: (value: number) => number) => (
+  rect: IRect
+): IRect => {
+  return {
+    x: func(rect.x),
+    y: func(rect.y),
+    width: func(rect.width),
+    height: func(rect.height)
+  }
+}
+
+export const roundRect = elementWiseOperation(Math.round)
