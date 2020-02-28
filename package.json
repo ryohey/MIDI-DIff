@@ -29,7 +29,7 @@
     "mdi": "^2.2.43",
     "pixi.js": "^4.8.2",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
     "text-encoding": "^0.6.4"
   },
   "scripts": {
